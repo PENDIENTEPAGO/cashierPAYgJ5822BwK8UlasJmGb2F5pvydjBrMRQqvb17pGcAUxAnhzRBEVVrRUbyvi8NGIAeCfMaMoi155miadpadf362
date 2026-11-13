@@ -29,10 +29,8 @@
     /* Tarjeta del Método de Pago */
     .card-metodo { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eaeaea; text-align: center; }
     
-    /* Logo Bre-B Estilizado */
-    .logo-breb-container { display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px; }
-    .logo-breb-text { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; font-family: system-ui, -apple-system, sans-serif; }
-    .breb-cyan { color: #00e5ff; }
+    /* Logo Bre-B Imagen Oficial */
+    .logo-breb-img { height: 28px; width: auto; margin-bottom: 4px; display: inline-block; }
 
     .titulo-llave-unica { font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 16px; }
     
@@ -75,7 +73,7 @@
       <div class="expired-msg">Este link de cobro ha caducado por motivos de seguridad (tiempo límite de 59 minutos superado). Por favor, solicita un nuevo enlace de pago.</div>
     </div>
 
-    <!-- BLOQUE DE INFORMACIÓN DE PAGO (OCULTO POR DEFECTO EN LA PÁGINA PRINCIPAL) -->
+    <!-- BLOQUE DE INFORMACIÓN DE PAGO (OCULTO EN LA PÁGINA PRINCIPAL) -->
     <div id="bloque-pago" style="display: none;">
       
       <!-- ENCABEZADO -->
@@ -106,28 +104,12 @@
 
       <!-- TARJETA DEL MÉTODO DE PAGO -->
       <div class="card-metodo">
-        <div class="logo-breb-container">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(1px);">
-            <path d="M4 6H18L13 12L18 18H4" stroke="url(#paint0_linear)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="paint0_linear" x1="4" y1="6" x2="18" y2="18" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00bfff"/>
-                <stop offset="1" stop-color="#00e5ff"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <span class="logo-breb-text breb-cyan">re</span>
-          <span class="logo-breb-text breb-cyan">-</span>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(1px);">
-            <path d="M4 6H18L13 12L18 18H4" stroke="url(#paint1_linear)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="paint1_linear" x1="4" y1="6" x2="18" y2="18" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00e5ff"/>
-                <stop offset="1" stop-color="#00ff66"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
+        <!-- LOGO BRE-B OFICIAL (Puedes cambiar el atributo src por el enlace directo o archivo de tu logo) -->
+        <img src="https://i.imgur.com/TuLogoBreB.png" alt="Bre-B" class="logo-breb-img" id="img-logo-breb" 
+             onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='block';">
+        
+        <!-- Fallback en texto SVG por si la URL externa demora en cargar -->
+        <div id="fallback-logo" style="display:none; font-size: 22px; font-weight: 900; color: #00e5ff; margin-bottom: 4px;">Bre-B</div>
 
         <div class="titulo-llave-unica">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
@@ -201,7 +183,7 @@
     const LIMITE_TIEMPO_MS = 59 * 60 * 1000; // 59 minutos
 
     if (nombre || monto || llave || empresa) {
-      // Es la página secundaria: ocultamos el generador y mostramos el bloque de pago
+      // Página secundaria: oculta el generador y muestra la pasarela de pago
       document.getElementById('panel-generador').style.display = 'none';
       document.getElementById('bloque-pago').style.display = 'block';
 
@@ -235,7 +217,7 @@
         iniciarTemporizador(tiempoRestante);
       }
     } else {
-      // Es la página principal: aseguramos que el bloque de pago esté oculto
+      // Página principal: muestra solo el generador
       document.getElementById('bloque-pago').style.display = 'none';
       document.getElementById('panel-generador').style.display = 'block';
     }
