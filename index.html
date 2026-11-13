@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud de Pago - Bre-B</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #333; }
+    .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
+    
+    /* Encabezado */
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .header-empresa { font-size: 24px; font-weight: 800; color: #1a102f; }
+    .badge-segura { font-size: 12px; font-weight: 600; color: #b78103; display: flex; align-items: center; gap: 4px; }
+
+    /* Tarjeta del Monto */
+    .card-monto { background: #ffcc00; padding: 20px 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); color: #1a102f; }
+    .label-monto { font-size: 13px; font-weight: 600; color: #333; }
+    .valor-monto { font-size: 32px; font-weight: 800; color: #1a102f; margin: 4px 0 12px 0; }
+    .divider-monto { border: none; border-top: 1px dashed rgba(0,0,0,0.2); margin: 12px 0; }
+    .badge-cliente { font-size: 12px; color: #333; font-weight: 500; }
+    .badge-cliente span { font-weight: 700; }
+
+    /* Tarjeta de Temporizador */
+    .card-timer { background: #fff; padding: 12px 16px; border-radius: 10px; border: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: #333; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    .timer-display { display: flex; gap: 4px; align-items: center; }
+    .timer-box { background: #ffcc00; color: #1a102f; padding: 4px 8px; border-radius: 4px; font-size: 14px; font-weight: 800; min-width: 22px; text-align: center; }
+
+    /* Tarjeta del Método de Pago */
+    .card-metodo { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eaeaea; text-align: center; }
+    
+    /* Logo Bre-B Estilizado */
+    .logo-breb-container { display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 4px; }
+    .logo-breb-text { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; font-family: system-ui, -apple-system, sans-serif; }
+    .breb-cyan { color: #00e5ff; }
+
+    .titulo-llave-unica { font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 16px; }
+    
+    .box-llave-inline { background: #fffdf0; border: 1px solid #f3e5ab; padding: 10px 16px; border-radius: 8px; display: inline-flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .valor-llave { font-size: 18px; font-weight: 800; color: #1a102f; letter-spacing: 0.5px; }
+    .btn-copiar-inline { background: transparent; border: none; cursor: pointer; color: #f1c40f; display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 0; }
+    .btn-copiar-inline:hover { color: #d4ac0d; }
+
+    .warning-llave { font-size: 11px; color: #e67e22; font-weight: 600; margin-top: 6px; }
+
+    /* Instrucciones */
+    .steps-box { background: #fff; border: 1px solid #eaeaea; padding: 20px; border-radius: 12px; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: left; }
+    .steps-title { font-size: 15px; font-weight: 800; color: #1a102f; margin-bottom: 16px; }
+    .step-item { display: flex; gap: 12px; font-size: 13px; color: #555; margin-bottom: 14px; align-items: flex-start; line-height: 1.4; position: relative; }
+    .step-item:not(:last-child):before { content: ''; position: absolute; left: 10px; top: 22px; width: 1px; height: calc(100% + 4px); border-left: 1px dashed #f1c40f; z-index: 1; }
+    .step-num { background: #ffcc00; color: #1a102f; font-weight: 800; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; z-index: 2; }
+    .step-item div div { font-size: 13px; }
+
+    /* Panel Generador (Para ti) */
+    .card-generator { background: #fff; border: 1px solid #eaeaea; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 24px; border-radius: 12px; margin-top: 10px; text-align: left; }
+    .card-generator h3 { margin-top: 0; color: #1a102f; font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+    .card-generator label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 12px; }
+    .card-generator input { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+    .btn-gen { background: #ffcc00; color: #1a102f; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 14px; font-weight: 800; margin-top: 18px; box-shadow: 0 2px 6px rgba(255, 204, 0, 0.3); }
+    .btn-gen:hover { background: #e6b800; }
+
+    /* Estilo de Pantalla Expirada */
+    .card-expired { background: #fff; border: 1px solid #e74c3c; padding: 30px 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .expired-title { color: #e74c3c; font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .expired-msg { font-size: 14px; color: #666; line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- PANTALLA DE ENLACE EXPIRADO (OCULTA POR DEFECTO) -->
+    <div class="card-expired" id="pantalla-expirada" style="display: none;">
+      <div class="expired-title">Enlace de pago vencido</div>
+      <div class="expired-msg">Este link de cobro ha caducado por motivos de seguridad (tiempo límite de 59 minutos superado). Por favor, solicita un nuevo enlace de pago.</div>
+    </div>
+
+    <!-- BLOQUE DE INFORMACIÓN DE PAGO (OCULTO POR DEFECTO EN LA PÁGINA PRINCIPAL) -->
+    <div id="bloque-pago" style="display: none;">
+      
+      <!-- ENCABEZADO -->
+      <div class="header-top">
+        <div class="header-empresa" id="nombre-empresa">Cashy</div>
+        <div class="badge-segura">🛡️ Esta es una transacción segura</div>
+      </div>
+
+      <!-- TARJETA DEL MONTO Y CLIENTE -->
+      <div class="card-monto">
+        <div class="label-monto">Importe a pagar</div>
+        <div class="valor-monto" id="monto-cliente">$0</div>
+        <hr class="divider-monto">
+        <div class="badge-cliente">Nombre del cliente: <span id="nombre-cliente">NOMBRE CLIENTE</span></div>
+      </div>
+
+      <!-- TARJETA DE TIEMPO DE VIGENCIA -->
+      <div class="card-timer">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span>⏱️</span> TIEMPO DE VIGENCIA
+        </div>
+        <div class="timer-display">
+          <div class="timer-box" id="t-horas">00</div>:
+          <div class="timer-box" id="t-minutos">59</div>:
+          <div class="timer-box" id="t-segundos">00</div>
+        </div>
+      </div>
+
+      <!-- TARJETA DEL MÉTODO DE PAGO -->
+      <div class="card-metodo">
+        <div class="logo-breb-container">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(1px);">
+            <path d="M4 6H18L13 12L18 18H4" stroke="url(#paint0_linear)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="paint0_linear" x1="4" y1="6" x2="18" y2="18" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00bfff"/>
+                <stop offset="1" stop-color="#00e5ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="logo-breb-text breb-cyan">re</span>
+          <span class="logo-breb-text breb-cyan">-</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: translateY(1px);">
+            <path d="M4 6H18L13 12L18 18H4" stroke="url(#paint1_linear)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="paint1_linear" x1="4" y1="6" x2="18" y2="18" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00e5ff"/>
+                <stop offset="1" stop-color="#00ff66"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="titulo-llave-unica">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+          LLAVE UNICA
+        </div>
+
+        <div class="box-llave-inline">
+          <div class="valor-llave" id="llave-cliente">0093378214</div>
+          <button class="btn-copiar-inline" onclick="copiarLlave()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+            Copiar
+          </button>
+        </div>
+
+        <div class="warning-llave" id="aviso-monto-dinamico">-Si el monto no coincide, el pago fallará.-</div>
+      </div>
+
+      <!-- PASOS -->
+      <div class="steps-box">
+        <div class="steps-title" id="titulo-como-pagar">Cómo pagar con Bre-B</div>
+        
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div>Abre tu app bancaria o billetera digital.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div>Ve a la sección de llaves.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div>Envía exactamente <strong id="step-monto-dinamico">$ 0</strong> a la llave <strong id="step-llave-dinamica">0093378214</strong>.<br><strong>Nota: Si el monto no coincide con <span id="step-monto-span">$ 0</span>, el pago fallará.</strong></div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div>Regresa y espera en esta pantalla la confirmación.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PANEL GENERADOR (SOLO APARECE EN LA PÁGINA PRINCIPAL) -->
+    <div class="card-generator" id="panel-generador">
+      <h3>Generar nuevo enlace de cobro</h3>
+      
+      <label>Nombre de la Empresa:</label>
+      <input type="text" id="gen-empresa" placeholder="Ej: Cashy" value="Cashy">
+
+      <label>Nombre del cliente:</label>
+      <input type="text" id="gen-nombre" placeholder="Ej: JUAN PEREZ">
+      
+      <label>Monto:</label>
+      <input type="number" id="gen-monto" placeholder="Ej: 1500000">
+      
+      <label>Llave Bre-B:</label>
+      <input type="text" id="gen-llave" placeholder="Ej: 0093378214">
+      
+      <button class="btn-gen" onclick="generarLink()">Generar y Copiar Enlace</button>
+    </div>
+
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const empresa = urlParams.get('empresa');
+    const nombre = urlParams.get('nombre');
+    const monto = urlParams.get('monto');
+    const llave = urlParams.get('llave');
+    const time = urlParams.get('t'); 
+
+    const LIMITE_TIEMPO_MS = 59 * 60 * 1000; // 59 minutos
+
+    if (nombre || monto || llave || empresa) {
+      // Es la página secundaria: ocultamos el generador y mostramos el bloque de pago
+      document.getElementById('panel-generador').style.display = 'none';
+      document.getElementById('bloque-pago').style.display = 'block';
+
+      const ahora = Date.now();
+      const tiempoCreacion = time ? parseInt(time, 10) : ahora;
+
+      if (!time) {
+        const urlNueva = new URL(window.location.href);
+        urlNueva.searchParams.set('t', ahora);
+        window.history.replaceState({}, '', urlNueva);
+      }
+
+      const tiempoTranscurrido = ahora - (time ? parseInt(time, 10) : ahora);
+      let tiempoRestante = LIMITE_TIEMPO_MS - tiempoTranscurrido;
+
+      if (tiempoRestante <= 0) {
+        mostrarExpirado();
+      } else {
+        document.getElementById('nombre-empresa').innerText = empresa ? decodeURIComponent(empresa) : 'Cashy';
+        document.getElementById('nombre-cliente').innerText = nombre ? decodeURIComponent(nombre) : 'CLIENTE';
+        
+        const montoFormateado = monto ? '$ ' + Number(monto).toLocaleString('es-CO') : '$ 0';
+        document.getElementById('monto-cliente').innerText = montoFormateado;
+        document.getElementById('step-monto-dinamico').innerText = montoFormateado;
+        document.getElementById('step-monto-span').innerText = montoFormateado;
+
+        const llaveTexto = llave ? decodeURIComponent(llave) : '0093378214';
+        document.getElementById('llave-cliente').innerText = llaveTexto;
+        document.getElementById('step-llave-dinamica').innerText = llaveTexto;
+
+        iniciarTemporizador(tiempoRestante);
+      }
+    } else {
+      // Es la página principal: aseguramos que el bloque de pago esté oculto
+      document.getElementById('bloque-pago').style.display = 'none';
+      document.getElementById('panel-generador').style.display = 'block';
+    }
+
+    function mostrarExpirado() {
+      document.getElementById('bloque-pago').style.display = 'none';
+      document.getElementById('pantalla-expirada').style.display = 'block';
+    }
+
+    function iniciarTemporizador(duracionMs) {
+      let tiempoRestante = duracionMs;
+
+      const intervalo = setInterval(() => {
+        tiempoRestante -= 1000;
+
+        if (tiempoRestante <= 0) {
+          clearInterval(intervalo);
+          mostrarExpirado();
+          return;
+        }
+
+        const totalSegundos = Math.floor(tiempoRestante / 1000);
+        const horas = Math.floor(totalSegundos / 3600);
+        const minutos = Math.floor((totalSegundos % 3600) / 60);
+        const segundos = totalSegundos % 60;
+
+        document.getElementById('t-horas').innerText = String(horas).padStart(2, '0');
+        document.getElementById('t-minutos').innerText = String(minutos).padStart(2, '0');
+        document.getElementById('t-segundos').innerText = String(segundos).padStart(2, '0');
+      }, 1000);
+    }
+
+    function copiarLlave() {
+      const textoLlave = document.getElementById('llave-cliente').innerText;
+      if (textoLlave) {
+        navigator.clipboard.writeText(textoLlave);
+        alert('¡Llave copiada al portapapeles!');
+      } else {
+        alert('No hay llave especificada');
+      }
+    }
+
+    function generarLink() {
+      const inputEmpresa = document.getElementById('gen-empresa').value.trim();
+      const inputNombre = document.getElementById('gen-nombre').value.trim();
+      const inputMonto = document.getElementById('gen-monto').value.trim();
+      const inputLlave = document.getElementById('gen-llave').value.trim();
+      
+      if (!inputNombre || !inputMonto || !inputLlave) {
+        alert('Por favor completa todos los campos para generar el enlace.');
+        return;
+      }
+
+      const baseUrl = window.location.origin + window.location.pathname;
+      const empresaParam = inputEmpresa ? encodeURIComponent(inputEmpresa) : 'Cashy';
+      const timestampActual = Date.now(); 
+
+      const finalUrl = `${baseUrl}?empresa=${empresaParam}&nombre=${encodeURIComponent(inputNombre)}&monto=${encodeURIComponent(inputMonto)}&llave=${encodeURIComponent(inputLlave)}&t=${timestampActual}`;
+      
+      navigator.clipboard.writeText(finalUrl);
+      alert('¡Enlace de pago (válido por 59 min) generado y copiado!');
+    }
+  </script>
+
+</body>
+</html>
