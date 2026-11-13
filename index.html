@@ -29,9 +29,9 @@
     /* Tarjeta del Método de Pago */
     .card-metodo { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eaeaea; text-align: center; }
     
-    /* Logo Bre-B Imagen Real */
-    .logo-breb-container { display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
-    .logo-breb-img { height: 32px; width: auto; display: inline-block; }
+    /* Logo Bre-B con Texto Degradado Exacto */
+    .logo-breb-container { display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+    .logo-breb-texto { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; font-family: system-ui, -apple-system, sans-serif; background: linear-gradient(90deg, #00bfff 0%, #2de1b1 50%, #4cd964 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     .titulo-llave-unica { font-size: 12px; font-weight: 700; color: #555; display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 16px; }
     
@@ -74,7 +74,7 @@
       <div class="expired-msg">Este link de cobro ha caducado por motivos de seguridad (tiempo límite de 59 minutos superado). Por favor, solicita un nuevo enlace de pago.</div>
     </div>
 
-    <!-- BLOQUE DE INFORMACIÓN DE PAGO (OCULTO POR DEFECTO EN LA PÁGINA PRINCIPAL) -->
+    <!-- BLOQUE DE INFORMACIÓN DE PAGO (OCULTO EN LA PÁGINA PRINCIPAL) -->
     <div id="bloque-pago" style="display: none;">
       
       <!-- ENCABEZADO -->
@@ -106,9 +106,7 @@
       <!-- TARJETA DEL MÉTODO DE PAGO -->
       <div class="card-metodo">
         <div class="logo-breb-container">
-          <!-- REEMPLAZA EL ENLACE DE ABAJO (src="") CON LA URL DIRECTA DE TU LOGO OFICIAL -->
-          <img src="https://i.ibb.co/3s8x55q/logo-breb.png" alt="Bre-B" class="logo-breb-img" 
-               onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'30\'><text x=\'0\' y=\'22\' font-size=\'22\' font-weight=\'bold\' fill=\'#00bcd4\'>Bre-B</text></svg>';">
+          <span class="logo-breb-texto">Bre-B</span>
         </div>
 
         <div class="titulo-llave-unica">
